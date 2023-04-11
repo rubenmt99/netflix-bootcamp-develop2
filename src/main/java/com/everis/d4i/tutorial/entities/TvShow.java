@@ -1,5 +1,7 @@
 package com.everis.d4i.tutorial.entities;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.time.Year;
 import java.util.List;
@@ -31,8 +33,8 @@ public class TvShow implements Serializable {
 	@Column(name = "RECOMMENDED_AGE")
 	private byte recommendedAge;
 
-
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ApiModelProperty(hidden=true)
+	@ManyToMany(cascade = CascadeType.DETACH)
 	@JoinTable(name = "show_categories",
 			joinColumns = @JoinColumn(name = "tv_shows_id"),
 			inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -41,7 +43,8 @@ public class TvShow implements Serializable {
 	@Column(name = "ADVERTISING", nullable = true)
 	private String advertising;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tvShow")
+	@ApiModelProperty(hidden=true)
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "tvShow")
 	private List<Season> seasons;
 
 	public Long getId() {

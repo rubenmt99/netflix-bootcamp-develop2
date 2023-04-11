@@ -1,5 +1,7 @@
 package com.everis.d4i.tutorial.entities;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -31,6 +33,7 @@ public class Chapter implements Serializable {
 	@Column(name = "DURATION")
 	private short duration;
 
+	@ApiModelProperty(hidden=true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SEASON_ID", nullable = false)
 	private Season season;

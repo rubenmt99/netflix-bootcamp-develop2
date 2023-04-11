@@ -83,5 +83,25 @@ public class TvShowServiceImpl implements TvShowService {
 		}
 	}
 
+	@Override
+	public TvShowRest updateTvShow(TvShow tvShow) throws NetflixException {
+		TvShow tvShow1 = tvShowRepository.findById(tvShow.getId()).orElse(null);
+		if(tvShow1 == null){
+			return null;
+		}
+		tvShow1.setName(tvShow.getName());
+		tvShow1.setAdvertising(tvShow.getAdvertising());
+		/*tvShow1.setSeasons(tvShow.getSeasons());*/
+		tvShow1.setLongDescription(tvShow.getLongDescription());
+		tvShow1.setShortDescription(tvShow.getShortDescription());
+		tvShow1.setRecommendedAge(tvShow.getRecommendedAge());
+		tvShow1.setYear(tvShow.getYear());
+//		tvShow1.setCategory(tvShow.getCategory());
+
+		tvShowRepository.save(tvShow1);
+
+		return  modelMapper.map(tvShow1, TvShowRest.class);
+	}
+
 
 }

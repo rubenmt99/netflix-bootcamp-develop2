@@ -32,7 +32,7 @@ public class Season implements Serializable {
 	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TV_SHOW_ID", nullable = false)
+	@JoinColumn(name = "tv_shows_id", nullable = false)
 	private TvShow tvShow;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "season")

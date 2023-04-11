@@ -3,6 +3,8 @@ package com.everis.d4i.tutorial.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.everis.d4i.tutorial.entities.TvShow;
+import com.everis.d4i.tutorial.json.TvShowRest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,21 @@ public class ChapterServiceImpl implements ChapterService {
 				.findBySeasonTvShowIdAndSeasonNumberAndNumber(tvShowId, seasonNumber, chapterNumber)
 				.orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_CHAPTER));
 		return modelMapper.map(chapter, ChapterRest.class);
+	}
+
+	@Override
+	public ChapterRest updateChapter(Chapter chapter) throws NetflixException {
+		Chapter chapter1 = chapterRepository.findById(chapter.getId()).orElse(null);
+		if(chapter1 == null){
+			return null;
+		}
+		chapter1.setDuration(chapter.getDuration());
+		chapter1.setName(chapter.getName());
+		chapter1.setNumber(chapter.getNumber());
+		/*chapter1.setSeason(chapter.getSeason());*/
+		chapterRepository.save(chapter1);
+
+		return  modelMapper.map(chapter1, ChapterRest.class);
 	}
 
 }

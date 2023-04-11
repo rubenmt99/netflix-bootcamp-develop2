@@ -22,5 +22,6 @@ public interface TvShowController {
 
 	NetflixResponse<TvShowRest> deleteShow(Long idShow) throws NetflixException;
 
+	NetflixResponse<TvShowRest> updateTVShow(TvShow tvShow , BindingResult result, Long id) throws NetflixException;
 
 }

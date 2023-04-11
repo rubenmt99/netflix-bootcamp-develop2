@@ -17,4 +17,6 @@ public interface TvShowService {
 	TvShowRest addCategory(Long idShow, Long idCategory) throws NetflixException;
 
 	void deleteShow(Long idShow) throws NetflixException;
+
+	TvShowRest updateTvShow(TvShow tvShow) throws NetflixException;
 }

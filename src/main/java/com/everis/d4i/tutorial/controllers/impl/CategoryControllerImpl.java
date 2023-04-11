@@ -34,7 +34,6 @@ public class CategoryControllerImpl implements CategoryController {
 
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<List<CategoryRest>> getCategories() throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,

@@ -21,8 +21,8 @@ public class Category implements Serializable {
 	private String name;
 
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "category")
-	private List<TvShow> tvShows;
+//	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "category")
+//	private List<TvShow> tvShows;
 
 
 	public Category(Long id, String name) {
@@ -50,12 +50,12 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-	public List<TvShow> getTvShows() {
-		return tvShows;
-	}
-
-	public void setTvShows(List<TvShow> tvShows) {
-		this.tvShows = tvShows;
-	}
+//	public List<TvShow> getTvShows() {
+//		return tvShows;
+//	}
+//
+//	public void setTvShows(List<TvShow> tvShows) {
+//		this.tvShows = tvShows;
+//	}
 
 }

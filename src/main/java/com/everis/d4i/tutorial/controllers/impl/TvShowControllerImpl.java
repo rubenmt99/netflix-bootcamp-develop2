@@ -6,6 +6,8 @@ import com.everis.d4i.tutorial.entities.TvShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +60,7 @@ public class TvShowControllerImpl implements TvShowController {
 
 	@Override
 	@GetMapping(value = "/addCategory", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('USER')")
 	public NetflixResponse<TvShowRest> addShowCategory(@RequestParam Long idShow, @RequestParam Long idCategory) throws NetflixException {
 
 		TvShowRest tvShow1 = tvShowService.addCategory(idShow,idCategory);
@@ -73,6 +76,21 @@ public class TvShowControllerImpl implements TvShowController {
 	public NetflixResponse<TvShowRest> deleteShow(@PathVariable("id") Long idShow) throws NetflixException {
 		tvShowService.deleteShow(idShow);
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
+	}
+
+	@Override
+	@PutMapping(value = RestConstants.RESOURCE_ID)
+	public NetflixResponse<TvShowRest> updateTVShow(@Valid @RequestBody TvShow tvShow, BindingResult result , @PathVariable("id") Long id) throws NetflixException {
+		tvShow.setId(id);
+		if (result.hasErrors()){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+		TvShowRest tvShow1 = tvShowService.updateTvShow(tvShow);
+		if (tvShow1 == null){
+			return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No TvShow found");
+		}
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+				tvShow1);
 	}
 
 }

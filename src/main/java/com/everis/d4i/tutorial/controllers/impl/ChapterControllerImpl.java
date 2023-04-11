@@ -2,14 +2,13 @@ package com.everis.d4i.tutorial.controllers.impl;
 
 import java.util.List;
 
+import com.everis.d4i.tutorial.entities.Chapter;
+import com.everis.d4i.tutorial.json.TvShowRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import com.everis.d4i.tutorial.controllers.ChapterController;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
@@ -18,6 +17,9 @@ import com.everis.d4i.tutorial.responses.NetflixResponse;
 import com.everis.d4i.tutorial.services.ChapterService;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CHAPTER)
@@ -42,6 +44,21 @@ public class ChapterControllerImpl implements ChapterController {
 			@PathVariable short seasonNumber, @PathVariable short number) throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				chapterService.getChapterByTvShowIdAndSeasonNumberAndChapterNumber(tvShowId, seasonNumber, number));
+	}
+
+	@Override
+	@PutMapping(value = RestConstants.RESOURCE_ID)
+	public NetflixResponse<ChapterRest> updateChapter(@Valid @RequestBody Chapter chapter, BindingResult result, @PathVariable("id") Long id) throws NetflixException {
+		chapter.setId(id);
+		if (result.hasErrors()){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+		ChapterRest chapterRest = chapterService.updateChapter(chapter);
+		if (chapterRest == null){
+			return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No TvShow found");
+		}
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+				chapterRest);
 	}
 
 }
