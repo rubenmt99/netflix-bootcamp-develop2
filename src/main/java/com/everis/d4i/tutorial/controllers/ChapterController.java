@@ -20,4 +20,6 @@ public interface ChapterController {
 
 	NetflixResponse<ChapterRest> updateChapter(Chapter chapter, BindingResult result, Long id) throws NetflixException;
 
+
+	NetflixResponse<ChapterRest> deleteChapter(Long idChapter) throws NetflixException;
 }

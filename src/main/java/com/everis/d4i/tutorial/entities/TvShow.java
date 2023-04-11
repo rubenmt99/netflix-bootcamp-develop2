@@ -44,7 +44,7 @@ public class TvShow implements Serializable {
 	private String advertising;
 
 	@ApiModelProperty(hidden=true)
-	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "tvShow")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tvShow")
 	private List<Season> seasons;
 
 	public Long getId() {

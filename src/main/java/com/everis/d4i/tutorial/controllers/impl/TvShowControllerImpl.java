@@ -3,6 +3,7 @@ package com.everis.d4i.tutorial.controllers.impl;
 import java.util.List;
 
 import com.everis.d4i.tutorial.entities.TvShow;
+import com.everis.d4i.tutorial.repositories.TvShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,8 @@ public class TvShowControllerImpl implements TvShowController {
 	@Autowired
 	private TvShowService tvShowService;
 
+	@Autowired
+	private TvShowRepository tvShowRepository;
 
 	@Override
 	@ResponseStatus(HttpStatus.OK)
@@ -60,7 +63,7 @@ public class TvShowControllerImpl implements TvShowController {
 
 	@Override
 	@GetMapping(value = "/addCategory", produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public NetflixResponse<TvShowRest> addShowCategory(@RequestParam Long idShow, @RequestParam Long idCategory) throws NetflixException {
 
 		TvShowRest tvShow1 = tvShowService.addCategory(idShow,idCategory);
@@ -73,13 +76,19 @@ public class TvShowControllerImpl implements TvShowController {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public NetflixResponse<TvShowRest> deleteShow(@PathVariable("id") Long idShow) throws NetflixException {
+		TvShow tvShow = tvShowRepository.findById(idShow).orElse(null);
+		if (tvShow == null){
+			return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No Show found by ID");
+		}
 		tvShowService.deleteShow(idShow);
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
 	}
 
 	@Override
 	@PutMapping(value = RestConstants.RESOURCE_ID)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public NetflixResponse<TvShowRest> updateTVShow(@Valid @RequestBody TvShow tvShow, BindingResult result , @PathVariable("id") Long id) throws NetflixException {
 		tvShow.setId(id);
 		if (result.hasErrors()){

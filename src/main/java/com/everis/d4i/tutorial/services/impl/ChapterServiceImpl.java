@@ -56,4 +56,16 @@ public class ChapterServiceImpl implements ChapterService {
 		return  modelMapper.map(chapter1, ChapterRest.class);
 	}
 
+	@Override
+	public void deleteChapter(Long idChapter) throws NetflixException {
+		Chapter chapter = chapterRepository.findById(idChapter).orElse(null);
+		if(chapter != null){
+			try {
+				chapterRepository.deleteById(idChapter);
+			}catch (Exception e){
+				throw new NotFoundException(e.getMessage());
+			}
+		}
+	}
+
 }

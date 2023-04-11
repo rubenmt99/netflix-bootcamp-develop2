@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.everis.d4i.tutorial.entities.Chapter;
 import com.everis.d4i.tutorial.json.TvShowRest;
+import com.everis.d4i.tutorial.repositories.ChapterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,9 @@ public class ChapterControllerImpl implements ChapterController {
 	@Autowired
 	private ChapterService chapterService;
 
+	@Autowired
+	private ChapterRepository chapterRepository;
+
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,6 +53,7 @@ public class ChapterControllerImpl implements ChapterController {
 
 	@Override
 	@PutMapping(value = RestConstants.RESOURCE_ID)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public NetflixResponse<ChapterRest> updateChapter(@Valid @RequestBody Chapter chapter, BindingResult result, @PathVariable("id") Long id) throws NetflixException {
 		chapter.setId(id);
 		if (result.hasErrors()){
@@ -59,6 +65,17 @@ public class ChapterControllerImpl implements ChapterController {
 		}
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				chapterRest);
+	}
+
+	@Override
+	@DeleteMapping("/{id}")
+	public NetflixResponse<ChapterRest> deleteChapter(@PathVariable("id") Long idChapter) throws NetflixException {
+		Chapter chapter = chapterRepository.findById(idChapter).orElse(null);
+		if (chapter == null) {
+			return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No chapter found by ID");
+		}
+		chapterService.deleteChapter(idChapter);
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
 	}
 
 }
