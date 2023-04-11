@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,7 @@ public class CategoryControllerImpl implements CategoryController {
 
 	@Override
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<List<CategoryRest>> getCategories() throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
