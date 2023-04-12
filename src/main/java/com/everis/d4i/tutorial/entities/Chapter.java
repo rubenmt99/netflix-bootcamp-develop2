@@ -1,21 +1,20 @@
 package com.everis.d4i.tutorial.entities;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "CHAPTERS")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Chapter implements Serializable {
 
 	private static final long serialVersionUID = 8725949484031409482L;
@@ -38,44 +37,14 @@ public class Chapter implements Serializable {
 	@JoinColumn(name = "SEASON_ID", nullable = false)
 	private Season season;
 
-	public Long getId() {
-		return id;
-	}
+	@ApiModelProperty(hidden=true)
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(
+			name = "chapter_actors",
+			joinColumns = @JoinColumn(name = "chapters_id"),
+			inverseJoinColumns = @JoinColumn(name = "actors_id")
+	)
+	private List<Actor> actors;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public short getNumber() {
-		return number;
-	}
-
-	public void setNumber(short number) {
-		this.number = number;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public short getDuration() {
-		return duration;
-	}
-
-	public void setDuration(short duration) {
-		this.duration = duration;
-	}
-
-	public Season getSeason() {
-		return season;
-	}
-
-	public void setSeason(Season season) {
-		this.season = season;
-	}
 
 }

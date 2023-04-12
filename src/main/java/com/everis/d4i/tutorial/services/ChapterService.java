@@ -19,4 +19,5 @@ public interface ChapterService {
 	ChapterRest updateChapter(Chapter chapter) throws NetflixException;
 
 	void deleteChapter(Long idChapter) throws NetflixException;
+
 }

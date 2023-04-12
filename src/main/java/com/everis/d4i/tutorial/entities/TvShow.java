@@ -1,6 +1,9 @@
 package com.everis.d4i.tutorial.entities;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.Year;
@@ -10,6 +13,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "TV_SHOWS")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TvShow implements Serializable {
 
 	private static final long serialVersionUID = 4916713904971425156L;
@@ -47,76 +53,8 @@ public class TvShow implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tvShow")
 	private List<Season> seasons;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getShortDescription() {
-		return shortDescription;
-	}
-
-	public void setShortDescription(String shortDescription) {
-		this.shortDescription = shortDescription;
-	}
-
-	public String getLongDescription() {
-		return longDescription;
-	}
-
-	public void setLongDescription(String longDescription) {
-		this.longDescription = longDescription;
-	}
-
-	public Year getYear() {
-		return year;
-	}
-
-	public void setYear(Year year) {
-		this.year = year;
-	}
-
-	public byte getRecommendedAge() {
-		return recommendedAge;
-	}
-
-	public void setRecommendedAge(byte recommendedAge) {
-		this.recommendedAge = recommendedAge;
-	}
-
-	public List<Category> getCategory() {
-		return category;
-	}
-
-	public void setCategory(List<Category> category) {
-		this.category = category;
-	}
-
-	public String getAdvertising() {
-		return advertising;
-	}
-
-	public void setAdvertising(String advertising) {
-		this.advertising = advertising;
-	}
-
-	public List<Season> getSeasons() {
-		return seasons;
-	}
-
-	public void setSeasons(List<Season> seasons) {
-		this.seasons = seasons;
-	}
+	@ApiModelProperty(hidden=true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tvShow")
+	private List<Award> awards;
 
 }

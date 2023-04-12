@@ -57,6 +57,10 @@ public class TvShowControllerImpl implements TvShowController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		TvShowRest tvShow1 = tvShowService.createTvShow(tvShow);
+		if (tvShow1 == null){
+			return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No se pudo crear el show");
+		}
+
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				tvShow1);
 	}
@@ -75,7 +79,7 @@ public class TvShowControllerImpl implements TvShowController {
 	}
 
 	@Override
-	@DeleteMapping("/{id}")
+	@DeleteMapping(value =RestConstants.RESOURCE_ID)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public NetflixResponse<TvShowRest> deleteShow(@PathVariable("id") Long idShow) throws NetflixException {
 		TvShow tvShow = tvShowRepository.findById(idShow).orElse(null);
