@@ -38,14 +38,16 @@ public class TvShowServiceImpl implements TvShowService {
 
 	@Override
 	public TvShowRest getTvShowById(Long id) throws NetflixException {
-
 		try {
-			return modelMapper.map(tvShowRepository.getOne(id), TvShowRest.class);
+			TvShow tvShow = tvShowRepository.findById(id)
+					.orElseThrow(() -> new NotFoundException("TV Show not found"));
+
+			return modelMapper.map(tvShow, TvShowRest.class);
 		} catch (EntityNotFoundException entityNotFoundException) {
 			throw new NotFoundException(entityNotFoundException.getMessage());
 		}
-
 	}
+
 
 	@Override
 	public TvShowRest createTvShow(TvShow tvShow) throws NetflixException {
