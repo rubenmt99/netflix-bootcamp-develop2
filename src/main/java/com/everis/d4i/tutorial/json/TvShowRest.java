@@ -2,10 +2,21 @@ package com.everis.d4i.tutorial.json;
 
 import java.io.Serializable;
 import java.time.Year;
+import java.util.List;
+import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class TvShowRest implements Serializable {
 
 	private static final long serialVersionUID = 4916713904971425156L;
@@ -19,68 +30,34 @@ public class TvShowRest implements Serializable {
 	private CategoryRest category;
 	private String advertising;
 
-	public Long getId() {
-		return id;
-	}
+	private List<ChapterRest> chapterRest;
 
-	public void setId(Long id) {
+	public TvShowRest(Long id, String name, String shortDescription, String longDescription, Year year, byte recommendedAge, String advertising) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getShortDescription() {
-		return shortDescription;
-	}
-
-	public void setShortDescription(String shortDescription) {
 		this.shortDescription = shortDescription;
-	}
-
-	public String getLongDescription() {
-		return longDescription;
-	}
-
-	public void setLongDescription(String longDescription) {
 		this.longDescription = longDescription;
-	}
-
-	public Year getYear() {
-		return year;
-	}
-
-	public void setYear(Year year) {
 		this.year = year;
-	}
-
-	public byte getRecommendedAge() {
-		return recommendedAge;
-	}
-
-	public void setRecommendedAge(byte recommendedAge) {
 		this.recommendedAge = recommendedAge;
-	}
-
-	public CategoryRest getCategory() {
-		return category;
-	}
-
-	public void setCategory(CategoryRest category) {
-		this.category = category;
-	}
-
-	public String getAdvertising() {
-		return advertising;
-	}
-
-	public void setAdvertising(String advertising) {
 		this.advertising = advertising;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TvShowRest)) return false;
+		TvShowRest that = (TvShowRest) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(shortDescription, that.shortDescription) &&
+				Objects.equals(longDescription, that.longDescription) &&
+				Objects.equals(year, that.year) &&
+				recommendedAge == that.recommendedAge &&
+				Objects.equals(advertising, that.advertising);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, shortDescription, longDescription, year, recommendedAge, advertising);
+	}
 }

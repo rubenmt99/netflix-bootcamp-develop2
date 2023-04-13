@@ -2,7 +2,6 @@ package com.everis.d4i.tutorial.controllers.impl;
 
 import com.everis.d4i.tutorial.controllers.ActorController;
 import com.everis.d4i.tutorial.entities.Actor;
-import com.everis.d4i.tutorial.entities.TvShow;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.json.CustomActorRest;
@@ -13,8 +12,6 @@ import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -111,9 +108,9 @@ public class ActorControllerImpl implements ActorController {
 
     @Override
     @GetMapping(value = "/alldata")
-    public NetflixResponse<List<CustomActorRest>> customActorSearch(@RequestParam Long id) throws NetflixException {
-        List<CustomActorRest> customActorRests = actorService.customActorSearch(id);
-        if (customActorRests.isEmpty()){
+    public NetflixResponse<CustomActorRest> customActorSearch(@RequestParam Long id) throws NetflixException {
+        CustomActorRest customActorRests = actorService.customActorSearch(id);
+        if (customActorRests == null){
             return new NetflixResponse<>(CommonConstants.ERROR, String.valueOf(HttpStatus.NOT_FOUND), "No data found");
         }
 

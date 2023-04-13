@@ -1,11 +1,9 @@
 package com.everis.d4i.tutorial.controllers;
 
 import com.everis.d4i.tutorial.entities.Actor;
-import com.everis.d4i.tutorial.entities.TvShow;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.json.CustomActorRest;
-import com.everis.d4i.tutorial.json.TvShowRest;
 import com.everis.d4i.tutorial.responses.NetflixResponse;
 import org.springframework.validation.BindingResult;
 
@@ -26,5 +24,5 @@ public interface ActorController {
 
     NetflixResponse<ActorRest> updateActor(Actor actor , BindingResult result, Long id) throws NetflixException;
 
-    NetflixResponse<List<CustomActorRest>> customActorSearch(Long id) throws NetflixException;
+    NetflixResponse<CustomActorRest> customActorSearch(Long id) throws NetflixException;
 }

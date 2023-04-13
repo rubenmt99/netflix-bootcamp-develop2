@@ -5,11 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.everis.d4i.tutorial.controllers.SeasonController;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
@@ -29,7 +25,7 @@ public class SeasonControllerImpl implements SeasonController {
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<List<SeasonRest>> getSeasonsByTvShow(Long tvShowId) throws NetflixException {
+	public NetflixResponse<List<SeasonRest>> getSeasonsByTvShow(@RequestParam Long tvShowId) throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				seasonService.getSeasonsByTvShow(tvShowId));
 	}
