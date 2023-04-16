@@ -38,8 +38,9 @@ public class TvShowControllerImpl implements TvShowController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<List<TvShowRest>> getTvShowsByCategory(@RequestParam Long categoryId)
 			throws NetflixException {
+		List<TvShowRest> tvShowRestList = tvShowService.getTvShowsByCategory(categoryId);
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
-				tvShowService.getTvShowsByCategory(categoryId));
+				tvShowRestList);
 	}
 
 	@Override

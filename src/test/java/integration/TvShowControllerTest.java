@@ -1,34 +1,29 @@
 package integration;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import FakerObjects.FakerObject;
 import com.everis.d4i.tutorial.controllers.impl.CategoryControllerImpl;
-import com.everis.d4i.tutorial.json.CategoryRest;
-import com.everis.d4i.tutorial.responses.NetflixResponse;
+import com.everis.d4i.tutorial.controllers.impl.TvShowControllerImpl;
+import com.everis.d4i.tutorial.entities.TvShow;
+import com.everis.d4i.tutorial.json.TvShowRest;
 import com.everis.d4i.tutorial.services.impl.CategoryServiceImpl;
+import com.everis.d4i.tutorial.services.impl.TvShowServiceImpl;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
@@ -37,26 +32,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class CategoryControllerTestWithMockitoRunner {
+public class TvShowControllerTest {
 
 	private MockMvc mockMvc;
 
 	@InjectMocks
-	private CategoryControllerImpl categoryControllerImpl;
+	private TvShowControllerImpl tvShowController;
 
 	@Mock
-	private CategoryServiceImpl categoryServiceImpl;
+	private TvShowServiceImpl tvShowService;
 
 
 	@BeforeClass
 	public static void runBeforeAllTestOfThisClass() {
 		System.out.println("Run before all test of this class!");
+
 	}
 
 	@Before
 	public void setUpMockMvc() {
 		MockitoAnnotations.openMocks(this);
-		this.mockMvc = MockMvcBuilders.standaloneSetup(categoryControllerImpl).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(tvShowController).build();
 	}
 
 	@Before
@@ -75,12 +71,13 @@ public class CategoryControllerTestWithMockitoRunner {
 	}
 
 	@Test
-	public void getCategories() throws Exception {
+	public void getShowByCategory() throws Exception {
 
-		when(categoryServiceImpl.getCategories()).thenReturn(GetMocksForTesting.getMockListCategoryRest());
+		when(tvShowService.getTvShowsByCategory(1L)).thenReturn(GetMocksForTesting.getMockListTvShowRest());
 
 		MvcResult result = mockMvc.perform(
-						get(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CATEGORY)
+						get(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_TV_SHOW)
+								.param("categoryId","1")
 								.accept(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -88,10 +85,11 @@ public class CategoryControllerTestWithMockitoRunner {
 				.andExpect(jsonPath("$.code", is(String.valueOf(HttpStatus.OK))))
 				.andExpect(jsonPath("$.message", is(CommonConstants.OK)))
 				.andExpect(jsonPath("$.status", is(CommonConstants.SUCCESS)))
-				.andExpect(jsonPath("$.data.length()", is(4)))
+				.andExpect(jsonPath("$.data").exists())
+				.andExpect(jsonPath("$.data.length()", is(2)))
 				.andReturn();
 		System.out.println(result.getResponse().getContentAsString());
-		verify(categoryServiceImpl, only()).getCategories();
+		verify(tvShowService, only()).getTvShowsByCategory(1L);
 	}
 
 }
